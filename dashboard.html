@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-10">
+  <div class="bg-indigo-900 text-white rounded-2xl p-8 mb-10 shadow-lg text-center">
+    <h1 class="text-3xl font-extrabold mb-2">Welcome, {{ user }}!</h1>
+    <p class="text-indigo-200">Choose a planner module to start smart financial planning with AI recommendations.</p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-6 mb-12">
+    <!-- Home Planner Card -->
+    <div class="bg-white rounded-xl shadow border border-slate-200 p-6 flex flex-col justify-between">
+      <div>
+        <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-4">
+          <i class="fa-solid fa-couch"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Home Budget Planner</h3>
+        <p class="text-sm text-slate-600 mb-6">Plan room interiors, fixtures, and furniture aligned with your budget from IKEA and Amazon.</p>
+      </div>
+      <a href="/home-planner" class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg">Get Started</a>
+    </div>
+
+    <!-- Party Planner Card -->
+    <div class="bg-white rounded-xl shadow border border-slate-200 p-6 flex flex-col justify-between">
+      <div>
+        <div class="w-12 h-12 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-xl mb-4">
+          <i class="fa-solid fa-champagne-glasses"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Party Budget Planner</h3>
+        <p class="text-sm text-slate-600 mb-6">Organize birthdays, weddings, or corporate events across catering, decor, and venue vendors.</p>
+      </div>
+      <a href="/party-planner" class="block text-center bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 rounded-lg">Get Started</a>
+    </div>
+
+    <!-- Jewelry Planner Card -->
+    <div class="bg-white rounded-xl shadow border border-slate-200 p-6 flex flex-col justify-between">
+      <div>
+        <div class="w-12 h-12 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mb-4">
+          <i class="fa-solid fa-gem"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Jewelry Budget Planner</h3>
+        <p class="text-sm text-slate-600 mb-6">Match curated accessories with your outfit and occasion using Gemini multimodal vision.</p>
+      </div>
+      <a href="/jewelry-planner" class="block text-center bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg">Get Started</a>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="bg-white rounded-xl shadow p-6 border border-slate-200">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-bold">Recent Recommendations</h2>
+      <a href="/history" class="text-sm text-indigo-600 hover:underline">View All History</a>
+    </div>
+    {% if history %}
+      <div class="divide-y divide-slate-100">
+        {% for item in history %}
+          <div class="py-3 flex justify-between items-center">
+            <div>
+              <p class="font-semibold text-slate-800">{{ item.type }}</p>
+              <p class="text-xs text-slate-500">{{ item.timestamp }}</p>
+            </div>
+            <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">{{ item.input.budget }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-sm text-slate-500">No previous plans generated yet. Pick a planner above!</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

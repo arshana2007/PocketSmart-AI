@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PocketSmart AI - Smart Budget & Recommendations</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+  <!-- Navbar -->
+  <nav class="bg-indigo-900 text-white py-4 px-6 shadow-md flex justify-between items-center">
+    <a href="/" class="text-2xl font-bold tracking-tight flex items-center space-x-2">
+      <i class="fa-solid fa-wallet text-indigo-400"></i>
+      <span>PocketSmart <span class="text-indigo-400 font-normal">AI</span></span>
+    </a>
+    <div class="space-x-6 text-sm flex items-center">
+      {% if user %}
+        <a href="/dashboard" class="hover:text-indigo-300">Dashboard</a>
+        <a href="/home-planner" class="hover:text-indigo-300">Home</a>
+        <a href="/party-planner" class="hover:text-indigo-300">Party</a>
+        <a href="/jewelry-planner" class="hover:text-indigo-300">Jewelry</a>
+        <a href="/history" class="hover:text-indigo-300">History</a>
+        <a href="/logout" class="bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg text-white font-medium">Logout</a>
+      {% else %}
+        <a href="/login" class="hover:text-indigo-300">Sign In</a>
+        <a href="/register" class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg font-medium text-white shadow">Get Started</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- Main Body Content -->
+  <main class="flex-grow">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-indigo-950 text-slate-400 text-center py-6 text-sm border-t border-indigo-900">
+    <p>© 2026 PocketSmart AI | Smart Budget & Recommendation Assistant. All rights reserved.</p>
+  </footer>
+</body>
+</html>

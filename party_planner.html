@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+  {% if error %}<div class="bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg mb-6 text-sm">{{ error }}</div>{% endif %}
+  <div class="mb-6 text-center">
+    <h1 class="text-2xl font-bold text-slate-900">AI Party Budget Planner</h1>
+    <p class="text-slate-600 text-sm">Plan an event with venue, catering, and entertainment allocation.</p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow p-6 border border-slate-200 mb-8">
+    <form action="/generate-party" method="post" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold mb-1">Total Budget (INR ₹)</label>
+          <input type="number" name="total_budget" value="{{ input_budget if input_budget else 25000 }}" required class="w-full border rounded-lg p-2.5">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1">Number of Guests</label>
+          <input type="number" name="num_guests" value="25" required class="w-full border rounded-lg p-2.5">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold mb-1">Event Type</label>
+          <select name="party_type" class="w-full border rounded-lg p-2.5">
+            <option value="Birthday Party">Birthday Party</option>
+            <option value="Wedding / Reception">Wedding / Reception</option>
+            <option value="Anniversary">Anniversary</option>
+            <option value="Corporate Gathering">Corporate Gathering</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1">Venue Preference</label>
+          <select name="venue_type" class="w-full border rounded-lg p-2.5">
+            <option value="Home / Backyard">Home / Backyard</option>
+            <option value="Rented Banquet Hall">Rented Banquet Hall</option>
+            <option value="Outdoor Lawn / Resort">Outdoor Lawn / Resort</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold mb-2">Required Services</label>
+        <div class="flex gap-6">
+          <label class="inline-flex items-center text-sm"><input type="checkbox" name="catering" value="1" checked class="mr-2"> Catering (Swiggy/Zomato)</label>
+          <label class="inline-flex items-center text-sm"><input type="checkbox" name="decoration" value="1" checked class="mr-2"> Decoration</label>
+          <label class="inline-flex items-center text-sm"><input type="checkbox" name="entertainment" value="1" checked class="mr-2"> Music & Entertainment</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold mb-1">Special Requirements</label>
+        <textarea name="additional_requirements" placeholder="Dietary preferences, theme colors..." class="w-full border rounded-lg p-2 text-sm"></textarea>
+      </div>
+
+      <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-lg shadow">Generate Party Plan</button>
+    </form>
+  </div>
+
+  {% if result %}
+  <div class="bg-white rounded-xl shadow p-6 border border-amber-200">
+    <div class="flex justify-between items-center mb-6 pb-4 border-b">
+      <h2 class="text-xl font-bold">Recommended Event Allocation</h2>
+      <span class="text-sm bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded">Budget: ₹{{ result.total_budget }}</span>
+    </div>
+
+    {% if result.venue_suggestions %}
+    <div class="p-4 bg-amber-50 rounded-lg mb-4 border border-amber-100">
+      <h3 class="font-bold text-amber-900 text-sm mb-1"><i class="fa-solid fa-hotel mr-1"></i> Venue Suggestion</h3>
+      <p class="text-xs text-amber-800">{{ result.venue_suggestions.type }} (Capacity: {{ result.venue_suggestions.capacity }}) - Estimated: ₹{{ result.venue_suggestions.estimated_cost }}</p>
+    </div>
+    {% endif %}
+
+    <div class="space-y-4 mb-6">
+      {% for item in result.budget_breakdown %}
+      <div class="p-4 bg-slate-50 border rounded-lg flex flex-col md:flex-row justify-between md:items-center gap-3">
+        <div>
+          <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded">{{ item.category }}</span>
+          <p class="text-xs text-slate-700 mt-1">{{ item.description }}</p>
+        </div>
+        <div class="text-right">
+          <p class="font-bold text-amber-800">₹{{ item.allocation }}</p>
+          <div class="flex gap-2 mt-2">
+            {% for platform, url in item.shopping_links.items() %}
+              <a href="{{ url }}" target="_blank" class="text-xs bg-white border border-slate-300 hover:bg-slate-100 px-2 py-1 rounded font-medium">{{ platform }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

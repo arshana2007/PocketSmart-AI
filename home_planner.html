@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+  {% if error %}<div class="bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg mb-6 text-sm">{{ error }}</div>{% endif %}
+  <div class="mb-6 text-center">
+    <h1 class="text-2xl font-bold text-slate-900">Home Interior Budget Planner</h1>
+    <p class="text-slate-600 text-sm">Create a personalized budget plan for your room decor and furniture.</p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow p-6 border border-slate-200 mb-8">
+    <form action="/generate-home" method="post" class="space-y-6">
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-slate-700">Total Budget (INR ₹)</label>
+        <input type="number" name="total_budget" value="{{ input_budget if input_budget else 50000 }}" required class="w-full border rounded-lg p-2.5 text-slate-800 focus:ring-2 focus:ring-indigo-400 outline-none">
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-600">Lights / Fixtures</label>
+          <input type="number" name="num_lights" value="4" class="w-full border rounded-lg p-2 text-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-600">Ceiling Fans</label>
+          <input type="number" name="num_fans" value="2" class="w-full border rounded-lg p-2 text-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-600">Furniture Items</label>
+          <input type="number" name="num_furniture" value="2" class="w-full border rounded-lg p-2 text-slate-800">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-600">Dining Tables</label>
+          <input type="number" name="num_dining_tables" value="1" class="w-full border rounded-lg p-2 text-slate-800">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold mb-2 text-slate-700">Rooms to Include</label>
+        <div class="flex gap-4">
+          <label class="inline-flex items-center text-sm"><input type="checkbox" name="living_room" value="1" checked class="mr-2 rounded"> Living Room</label>
+          <label class="inline-flex items-center text-sm"><input type="checkbox" name="bedroom" value="1" checked class="mr-2 rounded"> Bedroom</label>
+          <label class="inline-flex items-center text-sm"><input type="checkbox" name="kitchen" value="1" class="mr-2 rounded"> Kitchen</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-slate-700">Special Preferences / Style</label>
+        <textarea name="additional_requirements" placeholder="e.g. Minimalist wooden aesthetic, warm lighting" class="w-full border rounded-lg p-2 text-sm text-slate-800"></textarea>
+      </div>
+
+      <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg shadow">Generate Recommendations</button>
+    </form>
+  </div>
+
+  <!-- Results Section -->
+  {% if result %}
+  <div class="bg-white rounded-xl shadow p-6 border border-indigo-100">
+    <div class="flex justify-between items-center mb-6 pb-4 border-b">
+      <h2 class="text-xl font-bold text-slate-900">Your Tailored Home Plan</h2>
+      <span class="text-sm bg-green-100 text-green-800 font-bold px-3 py-1 rounded">Budget: ₹{{ result.total_budget }}</span>
+    </div>
+
+    <div class="space-y-4 mb-6">
+      {% for item in result.budget_breakdown %}
+      <div class="p-4 bg-slate-50 border rounded-lg flex flex-col md:flex-row justify-between md:items-center gap-3">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs bg-indigo-100 text-indigo-700 font-semibold px-2 py-0.5 rounded">{{ item.category }}</span>
+            <h4 class="font-bold text-slate-800">{{ item.item_name }}</h4>
+          </div>
+          <p class="text-xs text-slate-600 mt-1">{{ item.description }} (Qty: {{ item.quantity }})</p>
+        </div>
+        <div class="text-right">
+          <p class="font-bold text-indigo-700 text-base">₹{{ item.estimated_price }}</p>
+          <div class="flex gap-2 mt-2">
+            {% for platform, url in item.shopping_links.items() %}
+              <a href="{{ url }}" target="_blank" class="text-xs bg-white border border-slate-300 hover:bg-slate-100 px-2 py-1 rounded font-medium">{{ platform }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if result.styling_tips %}
+    <div class="bg-indigo-50 p-4 rounded-lg">
+      <h4 class="font-semibold text-indigo-900 text-sm mb-2"><i class="fa-solid fa-lightbulb mr-2"></i>Styling Tips</h4>
+      <ul class="list-disc list-inside text-xs text-indigo-800 space-y-1">
+        {% for tip in result.styling_tips %}
+          <li>{{ tip }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Premium Home Hero -->
+<section class="ps-hero">
+  <div class="ps-orb ps-orb-one"></div>
+  <div class="ps-orb ps-orb-two"></div>
+
+  <div class="ps-hero-inner">
+    <div class="ps-badge">
+      <span class="ps-badge-dot"></span>
+      AI-powered personal budget planning
+    </div>
+
+    <div class="ps-hero-grid">
+      <div class="ps-hero-copy">
+        <p class="ps-kicker">YOUR SMART MONEY ASSISTANT</p>
+        <h1>Plan your money.<br><span>Live smarter.</span></h1>
+        <p class="ps-hero-description">
+          PocketSmart AI turns your budget into practical plans for your
+          home, parties and jewelry — with intelligent recommendations built around you.
+        </p>
+
+        <div class="ps-actions">
+          {% if user %}
+            <a href="/dashboard" class="ps-btn ps-btn-primary">
+              Open Dashboard <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          {% else %}
+            <a href="/register" class="ps-btn ps-btn-primary">
+              Start Planning <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="/login" class="ps-btn ps-btn-ghost">Sign In</a>
+          {% endif %}
+        </div>
+
+        <div class="ps-trust-row">
+          <div><i class="fa-solid fa-wand-magic-sparkles"></i> AI recommendations</div>
+          <div><i class="fa-solid fa-shield-halved"></i> Simple & private</div>
+          <div><i class="fa-solid fa-chart-pie"></i> Budget focused</div>
+        </div>
+      </div>
+
+      <div class="ps-dashboard-card">
+        <div class="ps-card-top">
+          <div>
+            <span class="ps-mini-label">SMART BUDGET</span>
+            <h3>Your plan at a glance</h3>
+          </div>
+          <div class="ps-wallet-icon"><i class="fa-solid fa-wallet"></i></div>
+        </div>
+
+        <div class="ps-budget-box">
+          <span>Monthly budget</span>
+          <strong>₹50,000</strong>
+          <div class="ps-progress"><span></span></div>
+          <small>AI optimized spending plan</small>
+        </div>
+
+        <div class="ps-mini-stats">
+          <div><span class="stat-icon home"><i class="fa-solid fa-house"></i></span><b>Home</b><small>₹25,000</small></div>
+          <div><span class="stat-icon party"><i class="fa-solid fa-champagne-glasses"></i></span><b>Party</b><small>₹15,000</small></div>
+          <div><span class="stat-icon jewel"><i class="fa-solid fa-gem"></i></span><b>Jewelry</b><small>₹10,000</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature Section -->
+<section class="ps-features">
+  <div class="ps-section-heading">
+    <span>WHAT YOU CAN PLAN</span>
+    <h2>One smart place for every plan.</h2>
+    <p>Choose a planner, enter your budget, and let PocketSmart AI do the thinking.</p>
+  </div>
+
+  <div class="ps-feature-grid">
+    <a href="/home-planner" class="ps-feature-card">
+      <div class="ps-feature-icon home-icon"><i class="fa-solid fa-couch"></i></div>
+      <div class="ps-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+      <h3>Home Planner</h3>
+      <p>Plan furniture, lighting, fans, dining items and other essentials without losing control of your budget.</p>
+      <span>Plan your home <i class="fa-solid fa-arrow-right"></i></span>
+    </a>
+
+    <a href="/party-planner" class="ps-feature-card">
+      <div class="ps-feature-icon party-icon"><i class="fa-solid fa-champagne-glasses"></i></div>
+      <div class="ps-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+      <h3>Party Planner</h3>
+      <p>Split your budget across venue, food, decoration, entertainment and everything your event needs.</p>
+      <span>Plan your party <i class="fa-solid fa-arrow-right"></i></span>
+    </a>
+
+    <a href="/jewelry-planner" class="ps-feature-card">
+      <div class="ps-feature-icon jewel-icon"><i class="fa-solid fa-gem"></i></div>
+      <div class="ps-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+      <h3>Jewelry Planner</h3>
+      <p>Get personalized jewelry suggestions based on your occasion, style, budget and optional outfit image.</p>
+      <span>Plan your jewelry <i class="fa-solid fa-arrow-right"></i></span>
+    </a>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="ps-cta-wrap">
+  <div class="ps-cta">
+    <div>
+      <span>READY TO GET STARTED?</span>
+      <h2>Make every rupee work smarter.</h2>
+      <p>Build a practical plan with PocketSmart AI today.</p>
+    </div>
+    {% if user %}
+      <a href="/dashboard" class="ps-btn ps-btn-light">Go to Dashboard <i class="fa-solid fa-arrow-right"></i></a>
+    {% else %}
+      <a href="/register" class="ps-btn ps-btn-light">Create Free Account <i class="fa-solid fa-arrow-right"></i></a>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

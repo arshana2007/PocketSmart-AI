@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+  {% if error %}<div class="bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg mb-6 text-sm">{{ error }}</div>{% endif %}
+  <div class="mb-6 text-center">
+    <h1 class="text-2xl font-bold text-slate-900">Jewelry Recommendation Planner</h1>
+    <p class="text-slate-600 text-sm">Multimodal AI matching accessories with your outfit and occasion.</p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow p-6 border border-slate-200 mb-8">
+    <form action="/generate-jewelry" method="post" enctype="multipart/form-data" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold mb-1">Total Budget (INR ₹)</label>
+          <input type="number" name="total_budget" value="{{ input_budget if input_budget else 15000 }}" required class="w-full border rounded-lg p-2.5">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1">Occasion</label>
+          <input type="text" name="occasion" placeholder="e.g. Wedding Reception, Cocktail Party" required class="w-full border rounded-lg p-2.5">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold mb-1">Style Preferences</label>
+        <input type="text" name="style_preferences" placeholder="e.g. Minimalist silver, Rose gold, Traditional Kundan" class="w-full border rounded-lg p-2.5">
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold mb-1">Upload Outfit Image (Optional Multimodal Match)</label>
+        <input type="file" name="outfit_image" accept="image/*" class="w-full border border-dashed rounded-lg p-3 text-sm text-slate-500">
+      </div>
+
+      <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-lg shadow">Match Jewelry</button>
+    </form>
+  </div>
+
+  {% if result %}
+  <div class="bg-white rounded-xl shadow p-6 border border-emerald-100">
+    <div class="flex justify-between items-center mb-6 pb-4 border-b">
+      <h2 class="text-xl font-bold text-slate-900">Curated Jewelry Set</h2>
+      <span class="text-sm bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded">Budget: ₹{{ result.total_budget }}</span>
+    </div>
+
+    {% if result.outfit_analysis %}
+    <div class="p-3 bg-emerald-50 rounded-lg mb-4 text-xs text-emerald-900">
+      <strong>Aesthetic Analysis:</strong> {{ result.outfit_analysis }}
+    </div>
+    {% endif %}
+
+    <div class="space-y-4 mb-6">
+      {% for item in result.jewelry_recommendations %}
+      <div class="p-4 bg-slate-50 border rounded-lg flex flex-col md:flex-row justify-between md:items-center gap-3">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded">{{ item.item_type }}</span>
+            <span class="text-xs text-slate-500">{{ item.style }}</span>
+          </div>
+          <p class="text-xs text-slate-700 mt-1">{{ item.description }}</p>
+        </div>
+        <div class="text-right">
+          <p class="font-bold text-emerald-700">₹{{ item.estimated_price }}</p>
+          <div class="flex gap-2 mt-2">
+            {% for platform, url in item.shopping_links.items() %}
+              <a href="{{ url }}" target="_blank" class="text-xs bg-white border border-slate-300 hover:bg-slate-100 px-2 py-1 rounded font-medium">{{ platform }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
